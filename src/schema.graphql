@@ -2,8 +2,10 @@
 
 type Mutation {
   createEvent(title: String, description: String, image: String, largeImage: String, date: DateTime): Event!
+  updateEvent(id: ID!, title: String, description: String, date: DateTime): Event!
 }
 
 type Query {
   events: [Event]!
+  event(where: EventWhereUniqueInput!): Event
 }
