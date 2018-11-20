@@ -4,6 +4,7 @@ type Mutation {
   createEvent(title: String, description: String, image: String, largeImage: String, date: DateTime): Event!
   updateEvent(id: ID!, title: String, description: String, date: DateTime): Event!
   deleteEvent(id: ID!): Event
+  signup(email: String!, password: String!, name: String!): User
 }
 
 type Query {
