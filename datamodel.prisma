@@ -26,5 +26,5 @@ type Event {
   date: DateTime!
   createdAt: DateTime!
   updatedAt: DateTime!
-  # user: User!
+  user: User!
 }
