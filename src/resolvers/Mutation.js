@@ -43,9 +43,15 @@ const Mutations = {
   async deleteEvent(parent, args, ctx, info) {
     const where = { id: args.id };
     // 1. Find the item
-    const item = await ctx.db.query.event({ where }, `{ id title}`);
+    const event = await ctx.db.query.event({ where }, `{ id title user { id }}`);
     // 2. Check if they own that item, or have permissions
-    // TODO
+    const ownsEvent = event.user.id === ctx.request.userId;
+    const hasPermissions = ctx.request.user.permissions.some(permission => 
+      ['ADMIN', 'EVENTDELETE'].includes(permission) 
+    )
+    if (!ownsEvent && !hasPermissions) {
+      throw new Error ("You don't have permission to do that.")
+    }
     // 3. Delete the item
     return ctx.db.mutation.deleteEvent({ where }, info)
   },
