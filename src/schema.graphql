@@ -17,7 +17,8 @@ type Mutation {
 }
 
 type Query {
-  events: [Event]!
+  # events: [Event]!
+  events(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, first: Int): [Event]!
   event(where: EventWhereUniqueInput!): Event
   me: User
   users: [User]!
