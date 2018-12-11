@@ -7,7 +7,6 @@ const { hasPermission } = require('../utils');
 const Mutations = {
 
   async createEvent(parent, args, ctx, info) {
-    // TODO: check if they are logged in
     if (!ctx.request.userId) {
       throw new Error ("You must be logged in to do that");
     }
@@ -24,6 +23,25 @@ const Mutations = {
       }
     }, info);
     return event;
+  },
+
+  async createAct(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error ("You must be logged in to add an act.");
+    }
+
+    const act = await ctx.db.mutation.createAct({
+      data: {
+        // make a relationship between act and user
+        user: {
+          connect: {
+            id: ctx.request.userId
+          }
+        },
+        ...args
+      }
+    }, info);
+    return act;
   },
 
   updateEvent(parent, args, ctx, info) {

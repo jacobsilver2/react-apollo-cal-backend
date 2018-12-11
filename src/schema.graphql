@@ -14,6 +14,7 @@ type Mutation {
   requestReset(email: String!): SuccessMessage
   resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
   updatePermissions(permissions: [Permission], userId: ID!): User
+  createAct(name: String, description: String, image: String, email: String, largeImage: String, notes: String): Act!
 }
 
 type Query {

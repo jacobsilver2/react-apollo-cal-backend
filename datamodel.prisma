@@ -33,10 +33,10 @@ type Act {
   id: ID! @unique
   name: String!
   description: String
-  image: [String]
-  largeImage: [String]
+  image: String
+  largeImage: String
   event: [Event]
-  email: [String!]!
-  notes: [String]
+  email: String!
+  notes: String
   user: User!
 }
