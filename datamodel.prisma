@@ -28,3 +28,15 @@ type Event {
   updatedAt: DateTime!
   user: User!
 }
+
+type Act {
+  id: ID! @unique
+  name: String!
+  description: String
+  image: [String]
+  largeImage: [String]
+  event: [Event]
+  email: [String!]!
+  notes: [String]
+  user: User!
+}
