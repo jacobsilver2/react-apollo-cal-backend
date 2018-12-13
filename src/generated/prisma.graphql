@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/jacob-silver-22a2f3/booking-cal/dev
-# timestamp: Tue Dec 11 2018 10:37:07 GMT-0500 (Eastern Standard Time)
+# timestamp: Wed Dec 12 2018 10:15:25 GMT-0500 (Eastern Standard Time)
 
 type Act implements Node {
   id: ID!
@@ -30,7 +30,22 @@ input ActCreateInput {
   largeImage: String
   email: String!
   notes: String
-  event: EventCreateManyInput
+  event: EventCreateManyWithoutActInput
+  user: UserCreateOneInput!
+}
+
+input ActCreateOneWithoutEventInput {
+  create: ActCreateWithoutEventInput
+  connect: ActWhereUniqueInput
+}
+
+input ActCreateWithoutEventInput {
+  name: String!
+  description: String
+  image: String
+  largeImage: String
+  email: String!
+  notes: String
   user: UserCreateOneInput!
 }
 
@@ -120,7 +135,7 @@ input ActUpdateInput {
   largeImage: String
   email: String
   notes: String
-  event: EventUpdateManyInput
+  event: EventUpdateManyWithoutActInput
   user: UserUpdateOneRequiredInput
 }
 
@@ -131,6 +146,30 @@ input ActUpdateManyMutationInput {
   largeImage: String
   email: String
   notes: String
+}
+
+input ActUpdateOneWithoutEventInput {
+  create: ActCreateWithoutEventInput
+  connect: ActWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: ActUpdateWithoutEventDataInput
+  upsert: ActUpsertWithoutEventInput
+}
+
+input ActUpdateWithoutEventDataInput {
+  name: String
+  description: String
+  image: String
+  largeImage: String
+  email: String
+  notes: String
+  user: UserUpdateOneRequiredInput
+}
+
+input ActUpsertWithoutEventInput {
+  update: ActUpdateWithoutEventDataInput!
+  create: ActCreateWithoutEventInput!
 }
 
 input ActWhereInput {
@@ -453,11 +492,9 @@ scalar DateTime
 
 type Event implements Node {
   id: ID!
-  title: String!
-  description: String
-  image: String
-  largeImage: String
   date: DateTime!
+  notes: String
+  act: Act
   createdAt: DateTime!
   updatedAt: DateTime!
   user: User!
@@ -474,17 +511,21 @@ type EventConnection {
 }
 
 input EventCreateInput {
-  title: String!
-  description: String
-  image: String
-  largeImage: String
   date: DateTime!
+  notes: String
+  act: ActCreateOneWithoutEventInput
   user: UserCreateOneInput!
 }
 
-input EventCreateManyInput {
-  create: [EventCreateInput!]
+input EventCreateManyWithoutActInput {
+  create: [EventCreateWithoutActInput!]
   connect: [EventWhereUniqueInput!]
+}
+
+input EventCreateWithoutActInput {
+  date: DateTime!
+  notes: String
+  user: UserCreateOneInput!
 }
 
 """An edge in a connection."""
@@ -499,16 +540,10 @@ type EventEdge {
 enum EventOrderByInput {
   id_ASC
   id_DESC
-  title_ASC
-  title_DESC
-  description_ASC
-  description_DESC
-  image_ASC
-  image_DESC
-  largeImage_ASC
-  largeImage_DESC
   date_ASC
   date_DESC
+  notes_ASC
+  notes_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -517,11 +552,8 @@ enum EventOrderByInput {
 
 type EventPreviousValues {
   id: ID!
-  title: String!
-  description: String
-  image: String
-  largeImage: String
   date: DateTime!
+  notes: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -575,166 +607,6 @@ input EventScalarWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  title: String
-
-  """All values that are not equal to given value."""
-  title_not: String
-
-  """All values that are contained in given list."""
-  title_in: [String!]
-
-  """All values that are not contained in given list."""
-  title_not_in: [String!]
-
-  """All values less than the given value."""
-  title_lt: String
-
-  """All values less than or equal the given value."""
-  title_lte: String
-
-  """All values greater than the given value."""
-  title_gt: String
-
-  """All values greater than or equal the given value."""
-  title_gte: String
-
-  """All values containing the given string."""
-  title_contains: String
-
-  """All values not containing the given string."""
-  title_not_contains: String
-
-  """All values starting with the given string."""
-  title_starts_with: String
-
-  """All values not starting with the given string."""
-  title_not_starts_with: String
-
-  """All values ending with the given string."""
-  title_ends_with: String
-
-  """All values not ending with the given string."""
-  title_not_ends_with: String
-  description: String
-
-  """All values that are not equal to given value."""
-  description_not: String
-
-  """All values that are contained in given list."""
-  description_in: [String!]
-
-  """All values that are not contained in given list."""
-  description_not_in: [String!]
-
-  """All values less than the given value."""
-  description_lt: String
-
-  """All values less than or equal the given value."""
-  description_lte: String
-
-  """All values greater than the given value."""
-  description_gt: String
-
-  """All values greater than or equal the given value."""
-  description_gte: String
-
-  """All values containing the given string."""
-  description_contains: String
-
-  """All values not containing the given string."""
-  description_not_contains: String
-
-  """All values starting with the given string."""
-  description_starts_with: String
-
-  """All values not starting with the given string."""
-  description_not_starts_with: String
-
-  """All values ending with the given string."""
-  description_ends_with: String
-
-  """All values not ending with the given string."""
-  description_not_ends_with: String
-  image: String
-
-  """All values that are not equal to given value."""
-  image_not: String
-
-  """All values that are contained in given list."""
-  image_in: [String!]
-
-  """All values that are not contained in given list."""
-  image_not_in: [String!]
-
-  """All values less than the given value."""
-  image_lt: String
-
-  """All values less than or equal the given value."""
-  image_lte: String
-
-  """All values greater than the given value."""
-  image_gt: String
-
-  """All values greater than or equal the given value."""
-  image_gte: String
-
-  """All values containing the given string."""
-  image_contains: String
-
-  """All values not containing the given string."""
-  image_not_contains: String
-
-  """All values starting with the given string."""
-  image_starts_with: String
-
-  """All values not starting with the given string."""
-  image_not_starts_with: String
-
-  """All values ending with the given string."""
-  image_ends_with: String
-
-  """All values not ending with the given string."""
-  image_not_ends_with: String
-  largeImage: String
-
-  """All values that are not equal to given value."""
-  largeImage_not: String
-
-  """All values that are contained in given list."""
-  largeImage_in: [String!]
-
-  """All values that are not contained in given list."""
-  largeImage_not_in: [String!]
-
-  """All values less than the given value."""
-  largeImage_lt: String
-
-  """All values less than or equal the given value."""
-  largeImage_lte: String
-
-  """All values greater than the given value."""
-  largeImage_gt: String
-
-  """All values greater than or equal the given value."""
-  largeImage_gte: String
-
-  """All values containing the given string."""
-  largeImage_contains: String
-
-  """All values not containing the given string."""
-  largeImage_not_contains: String
-
-  """All values starting with the given string."""
-  largeImage_starts_with: String
-
-  """All values not starting with the given string."""
-  largeImage_not_starts_with: String
-
-  """All values ending with the given string."""
-  largeImage_ends_with: String
-
-  """All values not ending with the given string."""
-  largeImage_not_ends_with: String
   date: DateTime
 
   """All values that are not equal to given value."""
@@ -757,6 +629,46 @@ input EventScalarWhereInput {
 
   """All values greater than or equal the given value."""
   date_gte: DateTime
+  notes: String
+
+  """All values that are not equal to given value."""
+  notes_not: String
+
+  """All values that are contained in given list."""
+  notes_in: [String!]
+
+  """All values that are not contained in given list."""
+  notes_not_in: [String!]
+
+  """All values less than the given value."""
+  notes_lt: String
+
+  """All values less than or equal the given value."""
+  notes_lte: String
+
+  """All values greater than the given value."""
+  notes_gt: String
+
+  """All values greater than or equal the given value."""
+  notes_gte: String
+
+  """All values containing the given string."""
+  notes_contains: String
+
+  """All values not containing the given string."""
+  notes_not_contains: String
+
+  """All values starting with the given string."""
+  notes_starts_with: String
+
+  """All values not starting with the given string."""
+  notes_not_starts_with: String
+
+  """All values ending with the given string."""
+  notes_ends_with: String
+
+  """All values not ending with the given string."""
+  notes_not_ends_with: String
   createdAt: DateTime
 
   """All values that are not equal to given value."""
@@ -842,49 +754,32 @@ input EventSubscriptionWhereInput {
   node: EventWhereInput
 }
 
-input EventUpdateDataInput {
-  title: String
-  description: String
-  image: String
-  largeImage: String
-  date: DateTime
-  user: UserUpdateOneRequiredInput
-}
-
 input EventUpdateInput {
-  title: String
-  description: String
-  image: String
-  largeImage: String
   date: DateTime
+  notes: String
+  act: ActUpdateOneWithoutEventInput
   user: UserUpdateOneRequiredInput
 }
 
 input EventUpdateManyDataInput {
-  title: String
-  description: String
-  image: String
-  largeImage: String
   date: DateTime
-}
-
-input EventUpdateManyInput {
-  create: [EventCreateInput!]
-  connect: [EventWhereUniqueInput!]
-  disconnect: [EventWhereUniqueInput!]
-  delete: [EventWhereUniqueInput!]
-  update: [EventUpdateWithWhereUniqueNestedInput!]
-  updateMany: [EventUpdateManyWithWhereNestedInput!]
-  deleteMany: [EventScalarWhereInput!]
-  upsert: [EventUpsertWithWhereUniqueNestedInput!]
+  notes: String
 }
 
 input EventUpdateManyMutationInput {
-  title: String
-  description: String
-  image: String
-  largeImage: String
   date: DateTime
+  notes: String
+}
+
+input EventUpdateManyWithoutActInput {
+  create: [EventCreateWithoutActInput!]
+  connect: [EventWhereUniqueInput!]
+  disconnect: [EventWhereUniqueInput!]
+  delete: [EventWhereUniqueInput!]
+  update: [EventUpdateWithWhereUniqueWithoutActInput!]
+  updateMany: [EventUpdateManyWithWhereNestedInput!]
+  deleteMany: [EventScalarWhereInput!]
+  upsert: [EventUpsertWithWhereUniqueWithoutActInput!]
 }
 
 input EventUpdateManyWithWhereNestedInput {
@@ -892,15 +787,21 @@ input EventUpdateManyWithWhereNestedInput {
   data: EventUpdateManyDataInput!
 }
 
-input EventUpdateWithWhereUniqueNestedInput {
-  where: EventWhereUniqueInput!
-  data: EventUpdateDataInput!
+input EventUpdateWithoutActDataInput {
+  date: DateTime
+  notes: String
+  user: UserUpdateOneRequiredInput
 }
 
-input EventUpsertWithWhereUniqueNestedInput {
+input EventUpdateWithWhereUniqueWithoutActInput {
   where: EventWhereUniqueInput!
-  update: EventUpdateDataInput!
-  create: EventCreateInput!
+  data: EventUpdateWithoutActDataInput!
+}
+
+input EventUpsertWithWhereUniqueWithoutActInput {
+  where: EventWhereUniqueInput!
+  update: EventUpdateWithoutActDataInput!
+  create: EventCreateWithoutActInput!
 }
 
 input EventWhereInput {
@@ -952,166 +853,6 @@ input EventWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  title: String
-
-  """All values that are not equal to given value."""
-  title_not: String
-
-  """All values that are contained in given list."""
-  title_in: [String!]
-
-  """All values that are not contained in given list."""
-  title_not_in: [String!]
-
-  """All values less than the given value."""
-  title_lt: String
-
-  """All values less than or equal the given value."""
-  title_lte: String
-
-  """All values greater than the given value."""
-  title_gt: String
-
-  """All values greater than or equal the given value."""
-  title_gte: String
-
-  """All values containing the given string."""
-  title_contains: String
-
-  """All values not containing the given string."""
-  title_not_contains: String
-
-  """All values starting with the given string."""
-  title_starts_with: String
-
-  """All values not starting with the given string."""
-  title_not_starts_with: String
-
-  """All values ending with the given string."""
-  title_ends_with: String
-
-  """All values not ending with the given string."""
-  title_not_ends_with: String
-  description: String
-
-  """All values that are not equal to given value."""
-  description_not: String
-
-  """All values that are contained in given list."""
-  description_in: [String!]
-
-  """All values that are not contained in given list."""
-  description_not_in: [String!]
-
-  """All values less than the given value."""
-  description_lt: String
-
-  """All values less than or equal the given value."""
-  description_lte: String
-
-  """All values greater than the given value."""
-  description_gt: String
-
-  """All values greater than or equal the given value."""
-  description_gte: String
-
-  """All values containing the given string."""
-  description_contains: String
-
-  """All values not containing the given string."""
-  description_not_contains: String
-
-  """All values starting with the given string."""
-  description_starts_with: String
-
-  """All values not starting with the given string."""
-  description_not_starts_with: String
-
-  """All values ending with the given string."""
-  description_ends_with: String
-
-  """All values not ending with the given string."""
-  description_not_ends_with: String
-  image: String
-
-  """All values that are not equal to given value."""
-  image_not: String
-
-  """All values that are contained in given list."""
-  image_in: [String!]
-
-  """All values that are not contained in given list."""
-  image_not_in: [String!]
-
-  """All values less than the given value."""
-  image_lt: String
-
-  """All values less than or equal the given value."""
-  image_lte: String
-
-  """All values greater than the given value."""
-  image_gt: String
-
-  """All values greater than or equal the given value."""
-  image_gte: String
-
-  """All values containing the given string."""
-  image_contains: String
-
-  """All values not containing the given string."""
-  image_not_contains: String
-
-  """All values starting with the given string."""
-  image_starts_with: String
-
-  """All values not starting with the given string."""
-  image_not_starts_with: String
-
-  """All values ending with the given string."""
-  image_ends_with: String
-
-  """All values not ending with the given string."""
-  image_not_ends_with: String
-  largeImage: String
-
-  """All values that are not equal to given value."""
-  largeImage_not: String
-
-  """All values that are contained in given list."""
-  largeImage_in: [String!]
-
-  """All values that are not contained in given list."""
-  largeImage_not_in: [String!]
-
-  """All values less than the given value."""
-  largeImage_lt: String
-
-  """All values less than or equal the given value."""
-  largeImage_lte: String
-
-  """All values greater than the given value."""
-  largeImage_gt: String
-
-  """All values greater than or equal the given value."""
-  largeImage_gte: String
-
-  """All values containing the given string."""
-  largeImage_contains: String
-
-  """All values not containing the given string."""
-  largeImage_not_contains: String
-
-  """All values starting with the given string."""
-  largeImage_starts_with: String
-
-  """All values not starting with the given string."""
-  largeImage_not_starts_with: String
-
-  """All values ending with the given string."""
-  largeImage_ends_with: String
-
-  """All values not ending with the given string."""
-  largeImage_not_ends_with: String
   date: DateTime
 
   """All values that are not equal to given value."""
@@ -1134,6 +875,46 @@ input EventWhereInput {
 
   """All values greater than or equal the given value."""
   date_gte: DateTime
+  notes: String
+
+  """All values that are not equal to given value."""
+  notes_not: String
+
+  """All values that are contained in given list."""
+  notes_in: [String!]
+
+  """All values that are not contained in given list."""
+  notes_not_in: [String!]
+
+  """All values less than the given value."""
+  notes_lt: String
+
+  """All values less than or equal the given value."""
+  notes_lte: String
+
+  """All values greater than the given value."""
+  notes_gt: String
+
+  """All values greater than or equal the given value."""
+  notes_gte: String
+
+  """All values containing the given string."""
+  notes_contains: String
+
+  """All values not containing the given string."""
+  notes_not_contains: String
+
+  """All values starting with the given string."""
+  notes_starts_with: String
+
+  """All values not starting with the given string."""
+  notes_not_starts_with: String
+
+  """All values ending with the given string."""
+  notes_ends_with: String
+
+  """All values not ending with the given string."""
+  notes_not_ends_with: String
   createdAt: DateTime
 
   """All values that are not equal to given value."""
@@ -1178,6 +959,7 @@ input EventWhereInput {
 
   """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
+  act: ActWhereInput
   user: UserWhereInput
 }
 
@@ -1192,23 +974,23 @@ Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
-  createAct(data: ActCreateInput!): Act!
   createEvent(data: EventCreateInput!): Event!
+  createAct(data: ActCreateInput!): Act!
   createUser(data: UserCreateInput!): User!
-  updateAct(data: ActUpdateInput!, where: ActWhereUniqueInput!): Act
   updateEvent(data: EventUpdateInput!, where: EventWhereUniqueInput!): Event
+  updateAct(data: ActUpdateInput!, where: ActWhereUniqueInput!): Act
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  deleteAct(where: ActWhereUniqueInput!): Act
   deleteEvent(where: EventWhereUniqueInput!): Event
+  deleteAct(where: ActWhereUniqueInput!): Act
   deleteUser(where: UserWhereUniqueInput!): User
-  upsertAct(where: ActWhereUniqueInput!, create: ActCreateInput!, update: ActUpdateInput!): Act!
   upsertEvent(where: EventWhereUniqueInput!, create: EventCreateInput!, update: EventUpdateInput!): Event!
+  upsertAct(where: ActWhereUniqueInput!, create: ActCreateInput!, update: ActUpdateInput!): Act!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  updateManyActs(data: ActUpdateManyMutationInput!, where: ActWhereInput): BatchPayload!
   updateManyEvents(data: EventUpdateManyMutationInput!, where: EventWhereInput): BatchPayload!
+  updateManyActs(data: ActUpdateManyMutationInput!, where: ActWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
-  deleteManyActs(where: ActWhereInput): BatchPayload!
   deleteManyEvents(where: EventWhereInput): BatchPayload!
+  deleteManyActs(where: ActWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
 
@@ -1249,14 +1031,14 @@ enum Permission {
 }
 
 type Query {
-  acts(where: ActWhereInput, orderBy: ActOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Act]!
   events(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Event]!
+  acts(where: ActWhereInput, orderBy: ActOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Act]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  act(where: ActWhereUniqueInput!): Act
   event(where: EventWhereUniqueInput!): Event
+  act(where: ActWhereUniqueInput!): Act
   user(where: UserWhereUniqueInput!): User
-  actsConnection(where: ActWhereInput, orderBy: ActOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ActConnection!
   eventsConnection(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EventConnection!
+  actsConnection(where: ActWhereInput, orderBy: ActOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ActConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
 
   """Fetches an object given its ID"""
@@ -1267,8 +1049,8 @@ type Query {
 }
 
 type Subscription {
-  act(where: ActSubscriptionWhereInput): ActSubscriptionPayload
   event(where: EventSubscriptionWhereInput): EventSubscriptionPayload
+  act(where: ActSubscriptionWhereInput): ActSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
