@@ -5,7 +5,7 @@ type SuccessMessage {
 
 
 type Mutation {
-  createEvent(notes: String, date: DateTime): Event!
+  createEvent(notes: String, date: DateTime, name: String, description: String, email: String, image: String, largeImage: String): Event!
   updateEvent(id: ID!, notes: String, date: DateTime): Event!
   deleteEvent(id: ID!): Event
   signup(email: String!, password: String!, name: String!): User
@@ -33,3 +33,4 @@ type User {
   email: String!
   permissions: [Permission!]!
 }
+

@@ -10,16 +10,30 @@ const Mutations = {
     if (!ctx.request.userId) {
       throw new Error ("You must be logged in to do that");
     }
-
     const event = await ctx.db.mutation.createEvent({
       data: {
         // this is how we create a relationship between the item and the user
         user: {
           connect: {
             id: ctx.request.userId
-          }
+          },
         },
-        ...args
+        date: args.date,
+        notes: args.notes,
+        act: {
+          create: {
+            name: args.name,
+            email: args.email,
+            description: args.description,
+            image: args.image,
+            largeImage: args.largeImage,
+            user: {
+              connect: {
+                id: ctx.request.userId
+              },
+            },
+          },
+        },
       }
     }, info);
     return event;
