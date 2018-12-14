@@ -6,7 +6,7 @@ const { transport, makeANiceEmail } = require('../mail');
 const { hasPermission } = require('../utils');
 const Mutations = {
 
-  async createEvent(parent, args, ctx, info) {
+  async createEventWithNewAct(parent, args, ctx, info) {
     if (!ctx.request.userId) {
       throw new Error ("You must be logged in to do that");
     }
@@ -32,6 +32,30 @@ const Mutations = {
                 id: ctx.request.userId
               },
             },
+          },
+        },
+      }
+    }, info);
+    return event;
+  },
+
+  async createEventWithExistingAct(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error ("You must be logged in to do that");
+    }
+    const event = await ctx.db.mutation.createEvent({
+      data: {
+        // this is how we create a relationship between the item and the user
+        user: {
+          connect: {
+            id: ctx.request.userId
+          },
+        },
+        date: args.date,
+        notes: args.notes,
+        act: {
+          connect: {
+            id: args.actId,
           },
         },
       }
