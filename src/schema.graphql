@@ -7,7 +7,8 @@ type SuccessMessage {
 type Mutation {
   createEventWithNewAct(notes: String, date: DateTime, name: String, description: String, email: String, image: String, largeImage: String, actId: String): Event!
   createEventWithExistingAct(notes: String, date: DateTime, actId: String): Event!
-  updateEvent(id: ID!, notes: String, date: DateTime): Event!
+  updateEvent(id: ID!, notes: String, date: DateTime, name: String, description: String, email: String, image: String, largeImage: String, actId: String): Event!
+  updateEventWithExistingAct(id: ID!, notes: String, date: DateTime, newActId: String, oldActId: String): Event!
   deleteEvent(id: ID!): Event
   signup(email: String!, password: String!, name: String!): User
   signin(email: String!, password: String!): User!
@@ -16,6 +17,7 @@ type Mutation {
   resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
   updatePermissions(permissions: [Permission], userId: ID!): User
   createAct(name: String, description: String, image: String, email: String, largeImage: String, notes: String): Act!
+  updateAct(id: ID!, name: String, email: String, description: String, notes: String, image: String, largeImage: String): Act!
 }
 
 type Query {

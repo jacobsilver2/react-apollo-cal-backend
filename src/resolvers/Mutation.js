@@ -63,6 +63,51 @@ const Mutations = {
     return event;
   },
 
+  updateEventWithExistingAct(parent, args, ctx, info) {
+    const updates = { ...args }
+    delete updates.id;
+    return ctx.db.mutation.updateEvent({
+      data: {
+        where: {
+          id: args.id
+        },
+        date: updates.date,
+        notes: updates.notes,
+        act: {
+          disconnect: [
+            {id: updates.oldActId},
+          ],
+          connect: [
+            {id: updates.newActId},
+          ],
+        },
+      },
+    })
+  },
+
+  updateEvent(parent, args, ctx, info) {
+    // take a copy of the updates
+    const updates = { ...args };
+    // remove the id from the updates
+    delete updates.id;
+    //run the update method
+    return ctx.db.mutation.updateEvent({
+      data: {
+        where: {
+          id: args.id
+        },
+        date: args.date,
+        notes: args.notes,
+        act: {
+          update: {
+            image: args.image,
+            description: args.description,
+          }
+        },
+      },
+    }, info)
+  },
+
   async createAct(parent, args, ctx, info) {
     if (!ctx.request.userId) {
       throw new Error ("You must be logged in to add an act.");
@@ -82,13 +127,15 @@ const Mutations = {
     return act;
   },
 
-  updateEvent(parent, args, ctx, info) {
+
+
+  updateAct(parent, args, ctx, info){
     // take a copy of the updates
     const updates = { ...args };
-    // remove the id from the updates
+    // remove the ID from the update
     delete updates.id;
-    //run the update method
-    return ctx.db.mutation.updateEvent({
+    // run updateAct
+    return ctx.db.mutation.updateAct({
       data: updates,
       where: {
         id: args.id
