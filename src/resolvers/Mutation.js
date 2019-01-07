@@ -91,11 +91,17 @@ const Mutations = {
     // remove the id from the updates
     delete updates.id;
     //run the update method
+    console.log(updates)
+    // todo: look for args.newActId . If it is found, change to a new act
+    //! What do I want to do here?  If oldActId is found, do an act update, if newActId is found, do an act replace
+    if (updates.newActId) {
+      console.log('fuck you');
+    }
     return ctx.db.mutation.updateEvent({
+      where: {
+        id: args.id
+      },
       data: {
-        where: {
-          id: args.id
-        },
         date: args.date,
         notes: args.notes,
         act: {
