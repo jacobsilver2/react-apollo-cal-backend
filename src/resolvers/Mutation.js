@@ -63,6 +63,7 @@ const Mutations = {
     return event;
   },
 
+  //! probably not needed
   updateEventWithExistingAct(parent, args, ctx, info) {
     const updates = { ...args }
     delete updates.id;
@@ -91,11 +92,27 @@ const Mutations = {
     // remove the id from the updates
     delete updates.id;
     //run the update method
-    console.log(updates)
-    // todo: look for args.newActId . If it is found, change to a new act
-    //! What do I want to do here?  If oldActId is found, do an act update, if newActId is found, do an act replace
+    
+    //! apparently a new feature will be released soon with a 'set' function to replace a nested node.
+    //! i will wait until that feature is implemented to fix this bug.
+
     if (updates.newActId) {
-      console.log('fuck you');
+      console.log(updates)  
+      return ctx.db.mutation.updateEvent({
+        where: {
+          id: args.id
+        },
+        data: {
+          act: {
+            disconnect: [
+              {id: updates.actId},
+            ],
+            connect: [
+              {id: updates.newActId}
+            ],
+          }
+        }
+      }, info)
     }
     return ctx.db.mutation.updateEvent({
       where: {
