@@ -19,6 +19,7 @@ const Mutations = {
           },
         },
         date: args.date,
+        time: args.time,
         notes: args.notes,
         act: {
           create: {
@@ -52,6 +53,7 @@ const Mutations = {
           },
         },
         date: args.date,
+        time: args.time,
         notes: args.notes,
         act: {
           connect: {
@@ -92,7 +94,7 @@ const Mutations = {
     // remove the id from the updates
     delete updates.id;
     //run the update method
-    
+
     //! apparently a new feature will be released soon with a 'set' function to replace a nested node.
     //! i will wait until that feature is implemented to fix this bug.
 
@@ -120,6 +122,7 @@ const Mutations = {
       },
       data: {
         date: args.date,
+        time: args.time,
         notes: args.notes,
         act: {
           update: {
