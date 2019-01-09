@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/jacob-silver-22a2f3/booking-cal/dev
-# timestamp: Tue Jan 08 2019 09:07:05 GMT-0500 (Eastern Standard Time)
+# timestamp: Wed Jan 09 2019 16:28:12 GMT-0500 (Eastern Standard Time)
 
 type Act implements Node {
   id: ID!
@@ -492,8 +492,7 @@ scalar DateTime
 
 type Event implements Node {
   id: ID!
-  date: DateTime!
-  time: DateTime!
+  start: DateTime!
   notes: String
   act: Act
   createdAt: DateTime!
@@ -512,8 +511,7 @@ type EventConnection {
 }
 
 input EventCreateInput {
-  date: DateTime!
-  time: DateTime!
+  start: DateTime!
   notes: String
   act: ActCreateOneWithoutEventInput
   user: UserCreateOneInput!
@@ -525,8 +523,7 @@ input EventCreateManyWithoutActInput {
 }
 
 input EventCreateWithoutActInput {
-  date: DateTime!
-  time: DateTime!
+  start: DateTime!
   notes: String
   user: UserCreateOneInput!
 }
@@ -543,10 +540,8 @@ type EventEdge {
 enum EventOrderByInput {
   id_ASC
   id_DESC
-  date_ASC
-  date_DESC
-  time_ASC
-  time_DESC
+  start_ASC
+  start_DESC
   notes_ASC
   notes_DESC
   createdAt_ASC
@@ -557,8 +552,7 @@ enum EventOrderByInput {
 
 type EventPreviousValues {
   id: ID!
-  date: DateTime!
-  time: DateTime!
+  start: DateTime!
   notes: String
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -613,50 +607,28 @@ input EventScalarWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  date: DateTime
+  start: DateTime
 
   """All values that are not equal to given value."""
-  date_not: DateTime
+  start_not: DateTime
 
   """All values that are contained in given list."""
-  date_in: [DateTime!]
+  start_in: [DateTime!]
 
   """All values that are not contained in given list."""
-  date_not_in: [DateTime!]
+  start_not_in: [DateTime!]
 
   """All values less than the given value."""
-  date_lt: DateTime
+  start_lt: DateTime
 
   """All values less than or equal the given value."""
-  date_lte: DateTime
+  start_lte: DateTime
 
   """All values greater than the given value."""
-  date_gt: DateTime
+  start_gt: DateTime
 
   """All values greater than or equal the given value."""
-  date_gte: DateTime
-  time: DateTime
-
-  """All values that are not equal to given value."""
-  time_not: DateTime
-
-  """All values that are contained in given list."""
-  time_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  time_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  time_lt: DateTime
-
-  """All values less than or equal the given value."""
-  time_lte: DateTime
-
-  """All values greater than the given value."""
-  time_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  time_gte: DateTime
+  start_gte: DateTime
   notes: String
 
   """All values that are not equal to given value."""
@@ -783,28 +755,26 @@ input EventSubscriptionWhereInput {
 }
 
 input EventUpdateInput {
-  date: DateTime
-  time: DateTime
+  start: DateTime
   notes: String
   act: ActUpdateOneWithoutEventInput
   user: UserUpdateOneRequiredInput
 }
 
 input EventUpdateManyDataInput {
-  date: DateTime
-  time: DateTime
+  start: DateTime
   notes: String
 }
 
 input EventUpdateManyMutationInput {
-  date: DateTime
-  time: DateTime
+  start: DateTime
   notes: String
 }
 
 input EventUpdateManyWithoutActInput {
   create: [EventCreateWithoutActInput!]
   connect: [EventWhereUniqueInput!]
+  set: [EventWhereUniqueInput!]
   disconnect: [EventWhereUniqueInput!]
   delete: [EventWhereUniqueInput!]
   update: [EventUpdateWithWhereUniqueWithoutActInput!]
@@ -819,8 +789,7 @@ input EventUpdateManyWithWhereNestedInput {
 }
 
 input EventUpdateWithoutActDataInput {
-  date: DateTime
-  time: DateTime
+  start: DateTime
   notes: String
   user: UserUpdateOneRequiredInput
 }
@@ -885,50 +854,28 @@ input EventWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  date: DateTime
+  start: DateTime
 
   """All values that are not equal to given value."""
-  date_not: DateTime
+  start_not: DateTime
 
   """All values that are contained in given list."""
-  date_in: [DateTime!]
+  start_in: [DateTime!]
 
   """All values that are not contained in given list."""
-  date_not_in: [DateTime!]
+  start_not_in: [DateTime!]
 
   """All values less than the given value."""
-  date_lt: DateTime
+  start_lt: DateTime
 
   """All values less than or equal the given value."""
-  date_lte: DateTime
+  start_lte: DateTime
 
   """All values greater than the given value."""
-  date_gt: DateTime
+  start_gt: DateTime
 
   """All values greater than or equal the given value."""
-  date_gte: DateTime
-  time: DateTime
-
-  """All values that are not equal to given value."""
-  time_not: DateTime
-
-  """All values that are contained in given list."""
-  time_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  time_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  time_lt: DateTime
-
-  """All values less than or equal the given value."""
-  time_lte: DateTime
-
-  """All values greater than the given value."""
-  time_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  time_gte: DateTime
+  start_gte: DateTime
   notes: String
 
   """All values that are not equal to given value."""

@@ -18,8 +18,7 @@ const Mutations = {
             id: ctx.request.userId
           },
         },
-        date: args.date,
-        time: args.time,
+        start: args.start,
         notes: args.notes,
         act: {
           create: {
@@ -52,8 +51,7 @@ const Mutations = {
             id: ctx.request.userId
           },
         },
-        date: args.date,
-        time: args.time,
+        start: args.start,
         notes: args.notes,
         act: {
           connect: {
@@ -74,7 +72,7 @@ const Mutations = {
         where: {
           id: args.id
         },
-        date: updates.date,
+        start: updates.start,
         notes: updates.notes,
         act: {
           disconnect: [
@@ -116,18 +114,18 @@ const Mutations = {
         }
       }, info)
     }
+
     return ctx.db.mutation.updateEvent({
       where: {
         id: args.id
       },
       data: {
-        date: args.date,
-        time: args.time,
-        notes: args.notes,
+        start: updates.start,
+        notes: updates.notes,
         act: {
           update: {
-            image: args.image,
-            description: args.description,
+            image: updates.image,
+            description: updates.description,
           }
         },
       },
@@ -171,9 +169,9 @@ const Mutations = {
 
   async deleteEvent(parent, args, ctx, info) {
     const where = { id: args.id };
-    // 1. Find the item
-    const event = await ctx.db.query.event({ where }, `{ id title user { id }}`);
-    // 2. Check if they own that item, or have permissions
+    // 1. Find the event
+    const event = await ctx.db.query.event({ where }, `{ id user { id }}`);
+    // 2. Check if they own that event, or have permissions
     const ownsEvent = event.user.id === ctx.request.userId;
     const hasPermissions = ctx.request.user.permissions.some(permission => 
       ['ADMIN', 'EVENTDELETE'].includes(permission) 

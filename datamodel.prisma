@@ -19,8 +19,7 @@ type User {
 
 type Event {
   id: ID! @unique
-  date: DateTime!
-  time: DateTime!
+  start: DateTime!
   notes: String
   act: Act
   createdAt: DateTime!
