@@ -18,7 +18,9 @@ const Mutations = {
             id: ctx.request.userId
           },
         },
+        title: args.title,
         start: args.start,
+        end: args.end,
         notes: args.notes,
         act: {
           create: {
@@ -97,7 +99,6 @@ const Mutations = {
     //! i will wait until that feature is implemented to fix this bug.
 
     if (updates.newActId) {
-      console.log(updates)  
       return ctx.db.mutation.updateEvent({
         where: {
           id: args.id

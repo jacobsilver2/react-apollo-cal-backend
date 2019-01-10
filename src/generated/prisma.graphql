@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/jacob-silver-22a2f3/booking-cal/dev
-# timestamp: Wed Jan 09 2019 16:28:12 GMT-0500 (Eastern Standard Time)
+# timestamp: Thu Jan 10 2019 13:20:23 GMT-0500 (EST)
 
 type Act implements Node {
   id: ID!
@@ -492,7 +492,10 @@ scalar DateTime
 
 type Event implements Node {
   id: ID!
+  title: String!
   start: DateTime!
+  end: DateTime!
+  allDay: Boolean!
   notes: String
   act: Act
   createdAt: DateTime!
@@ -511,7 +514,10 @@ type EventConnection {
 }
 
 input EventCreateInput {
+  title: String!
   start: DateTime!
+  end: DateTime!
+  allDay: Boolean!
   notes: String
   act: ActCreateOneWithoutEventInput
   user: UserCreateOneInput!
@@ -523,7 +529,10 @@ input EventCreateManyWithoutActInput {
 }
 
 input EventCreateWithoutActInput {
+  title: String!
   start: DateTime!
+  end: DateTime!
+  allDay: Boolean!
   notes: String
   user: UserCreateOneInput!
 }
@@ -540,8 +549,14 @@ type EventEdge {
 enum EventOrderByInput {
   id_ASC
   id_DESC
+  title_ASC
+  title_DESC
   start_ASC
   start_DESC
+  end_ASC
+  end_DESC
+  allDay_ASC
+  allDay_DESC
   notes_ASC
   notes_DESC
   createdAt_ASC
@@ -552,7 +567,10 @@ enum EventOrderByInput {
 
 type EventPreviousValues {
   id: ID!
+  title: String!
   start: DateTime!
+  end: DateTime!
+  allDay: Boolean!
   notes: String
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -607,6 +625,46 @@ input EventScalarWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
   start: DateTime
 
   """All values that are not equal to given value."""
@@ -629,6 +687,32 @@ input EventScalarWhereInput {
 
   """All values greater than or equal the given value."""
   start_gte: DateTime
+  end: DateTime
+
+  """All values that are not equal to given value."""
+  end_not: DateTime
+
+  """All values that are contained in given list."""
+  end_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  end_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  end_lt: DateTime
+
+  """All values less than or equal the given value."""
+  end_lte: DateTime
+
+  """All values greater than the given value."""
+  end_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  end_gte: DateTime
+  allDay: Boolean
+
+  """All values that are not equal to given value."""
+  allDay_not: Boolean
   notes: String
 
   """All values that are not equal to given value."""
@@ -755,19 +839,28 @@ input EventSubscriptionWhereInput {
 }
 
 input EventUpdateInput {
+  title: String
   start: DateTime
+  end: DateTime
+  allDay: Boolean
   notes: String
   act: ActUpdateOneWithoutEventInput
   user: UserUpdateOneRequiredInput
 }
 
 input EventUpdateManyDataInput {
+  title: String
   start: DateTime
+  end: DateTime
+  allDay: Boolean
   notes: String
 }
 
 input EventUpdateManyMutationInput {
+  title: String
   start: DateTime
+  end: DateTime
+  allDay: Boolean
   notes: String
 }
 
@@ -789,7 +882,10 @@ input EventUpdateManyWithWhereNestedInput {
 }
 
 input EventUpdateWithoutActDataInput {
+  title: String
   start: DateTime
+  end: DateTime
+  allDay: Boolean
   notes: String
   user: UserUpdateOneRequiredInput
 }
@@ -854,6 +950,46 @@ input EventWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
   start: DateTime
 
   """All values that are not equal to given value."""
@@ -876,6 +1012,32 @@ input EventWhereInput {
 
   """All values greater than or equal the given value."""
   start_gte: DateTime
+  end: DateTime
+
+  """All values that are not equal to given value."""
+  end_not: DateTime
+
+  """All values that are contained in given list."""
+  end_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  end_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  end_lt: DateTime
+
+  """All values less than or equal the given value."""
+  end_lte: DateTime
+
+  """All values greater than the given value."""
+  end_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  end_gte: DateTime
+  allDay: Boolean
+
+  """All values that are not equal to given value."""
+  allDay_not: Boolean
   notes: String
 
   """All values that are not equal to given value."""

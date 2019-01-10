@@ -19,7 +19,10 @@ type User {
 
 type Event {
   id: ID! @unique
+  title: String!
   start: DateTime!
+  end: DateTime!
+  allDay: Boolean!
   notes: String
   act: Act
   createdAt: DateTime!
