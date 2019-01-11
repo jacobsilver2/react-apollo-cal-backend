@@ -53,7 +53,10 @@ const Mutations = {
             id: ctx.request.userId
           },
         },
+        title: args.title,
         start: args.start,
+        end: args.end,
+        allDay: args.allDay,
         notes: args.notes,
         act: {
           connect: {
@@ -121,12 +124,18 @@ const Mutations = {
         id: args.id
       },
       data: {
+        title: updates.title,
         start: updates.start,
+        end: updates.end,
+        allDay: updates.allDay,
         notes: updates.notes,
         act: {
           update: {
-            image: updates.image,
+            name: updates.name,
+            email: updates.email,
             description: updates.description,
+            image: updates.image,
+            largeImage: updates.largeImage,
           }
         },
       },

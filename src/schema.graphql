@@ -6,8 +6,8 @@ type SuccessMessage {
 
 type Mutation {
   createEventWithNewAct(title: String, notes: String, start: DateTime, end: DateTime, allDay: Boolean, name: String, description: String, email: String, image: String, largeImage: String, actId: String): Event!
-  createEventWithExistingAct(notes: String, start: DateTime, actId: String): Event!
-  updateEvent(id: ID!, notes: String, start: DateTime, name: String, description: String, email: String, image: String, largeImage: String, newActId: String, actId: String): Event!
+  createEventWithExistingAct(title: String, end: DateTime, allDay: Boolean, notes: String, start: DateTime, actId: String): Event!
+  updateEvent(id: ID!, title: String, notes: String, start: DateTime, end: DateTime, allDay: Boolean, name: String, description: String, email: String, image: String, largeImage: String, newActId: String, actId: String): Event!
   # below - probably not needed
   updateEventWithExistingAct(id: ID!, notes: String, date: DateTime, newActId: String, oldActId: String): Event!
   deleteEvent(id: ID!): Event
