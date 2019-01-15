@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/jacob-silver-22a2f3/booking-cal/dev
-# timestamp: Thu Jan 10 2019 13:20:23 GMT-0500 (EST)
+# timestamp: Tue Jan 15 2019 10:10:38 GMT-0500 (Eastern Standard Time)
 
 type Act implements Node {
   id: ID!
@@ -492,11 +492,13 @@ scalar DateTime
 
 type Event implements Node {
   id: ID!
+  status: EventStatus!
   title: String!
   start: DateTime!
   end: DateTime!
   allDay: Boolean!
   notes: String
+  draw: Int
   act: Act
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -514,11 +516,13 @@ type EventConnection {
 }
 
 input EventCreateInput {
+  status: EventStatus!
   title: String!
   start: DateTime!
   end: DateTime!
   allDay: Boolean!
   notes: String
+  draw: Int
   act: ActCreateOneWithoutEventInput
   user: UserCreateOneInput!
 }
@@ -529,11 +533,13 @@ input EventCreateManyWithoutActInput {
 }
 
 input EventCreateWithoutActInput {
+  status: EventStatus!
   title: String!
   start: DateTime!
   end: DateTime!
   allDay: Boolean!
   notes: String
+  draw: Int
   user: UserCreateOneInput!
 }
 
@@ -549,6 +555,8 @@ type EventEdge {
 enum EventOrderByInput {
   id_ASC
   id_DESC
+  status_ASC
+  status_DESC
   title_ASC
   title_DESC
   start_ASC
@@ -559,6 +567,8 @@ enum EventOrderByInput {
   allDay_DESC
   notes_ASC
   notes_DESC
+  draw_ASC
+  draw_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -567,11 +577,13 @@ enum EventOrderByInput {
 
 type EventPreviousValues {
   id: ID!
+  status: EventStatus!
   title: String!
   start: DateTime!
   end: DateTime!
   allDay: Boolean!
   notes: String
+  draw: Int
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -625,6 +637,16 @@ input EventScalarWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  status: EventStatus
+
+  """All values that are not equal to given value."""
+  status_not: EventStatus
+
+  """All values that are contained in given list."""
+  status_in: [EventStatus!]
+
+  """All values that are not contained in given list."""
+  status_not_in: [EventStatus!]
   title: String
 
   """All values that are not equal to given value."""
@@ -753,6 +775,28 @@ input EventScalarWhereInput {
 
   """All values not ending with the given string."""
   notes_not_ends_with: String
+  draw: Int
+
+  """All values that are not equal to given value."""
+  draw_not: Int
+
+  """All values that are contained in given list."""
+  draw_in: [Int!]
+
+  """All values that are not contained in given list."""
+  draw_not_in: [Int!]
+
+  """All values less than the given value."""
+  draw_lt: Int
+
+  """All values less than or equal the given value."""
+  draw_lte: Int
+
+  """All values greater than the given value."""
+  draw_gt: Int
+
+  """All values greater than or equal the given value."""
+  draw_gte: Int
   createdAt: DateTime
 
   """All values that are not equal to given value."""
@@ -799,6 +843,12 @@ input EventScalarWhereInput {
   updatedAt_gte: DateTime
 }
 
+enum EventStatus {
+  CONFIRMED
+  HELD
+  CANCELLED
+}
+
 type EventSubscriptionPayload {
   mutation: MutationType!
   node: Event
@@ -839,29 +889,35 @@ input EventSubscriptionWhereInput {
 }
 
 input EventUpdateInput {
+  status: EventStatus
   title: String
   start: DateTime
   end: DateTime
   allDay: Boolean
   notes: String
+  draw: Int
   act: ActUpdateOneWithoutEventInput
   user: UserUpdateOneRequiredInput
 }
 
 input EventUpdateManyDataInput {
+  status: EventStatus
   title: String
   start: DateTime
   end: DateTime
   allDay: Boolean
   notes: String
+  draw: Int
 }
 
 input EventUpdateManyMutationInput {
+  status: EventStatus
   title: String
   start: DateTime
   end: DateTime
   allDay: Boolean
   notes: String
+  draw: Int
 }
 
 input EventUpdateManyWithoutActInput {
@@ -882,11 +938,13 @@ input EventUpdateManyWithWhereNestedInput {
 }
 
 input EventUpdateWithoutActDataInput {
+  status: EventStatus
   title: String
   start: DateTime
   end: DateTime
   allDay: Boolean
   notes: String
+  draw: Int
   user: UserUpdateOneRequiredInput
 }
 
@@ -950,6 +1008,16 @@ input EventWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  status: EventStatus
+
+  """All values that are not equal to given value."""
+  status_not: EventStatus
+
+  """All values that are contained in given list."""
+  status_in: [EventStatus!]
+
+  """All values that are not contained in given list."""
+  status_not_in: [EventStatus!]
   title: String
 
   """All values that are not equal to given value."""
@@ -1078,6 +1146,28 @@ input EventWhereInput {
 
   """All values not ending with the given string."""
   notes_not_ends_with: String
+  draw: Int
+
+  """All values that are not equal to given value."""
+  draw_not: Int
+
+  """All values that are contained in given list."""
+  draw_in: [Int!]
+
+  """All values that are not contained in given list."""
+  draw_not_in: [Int!]
+
+  """All values less than the given value."""
+  draw_lt: Int
+
+  """All values less than or equal the given value."""
+  draw_lte: Int
+
+  """All values greater than the given value."""
+  draw_gt: Int
+
+  """All values greater than or equal the given value."""
+  draw_gte: Int
   createdAt: DateTime
 
   """All values that are not equal to given value."""
