@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/jacob-silver-22a2f3/booking-cal/dev
-# timestamp: Tue Jan 15 2019 10:10:38 GMT-0500 (Eastern Standard Time)
+# timestamp: Thu Jan 17 2019 08:40:58 GMT-0500 (Eastern Standard Time)
 
 type Act implements Node {
   id: ID!
@@ -497,7 +497,7 @@ type Event implements Node {
   start: DateTime!
   end: DateTime!
   allDay: Boolean!
-  notes: String
+  notes: [String!]!
   draw: Int
   act: Act
   createdAt: DateTime!
@@ -521,8 +521,8 @@ input EventCreateInput {
   start: DateTime!
   end: DateTime!
   allDay: Boolean!
-  notes: String
   draw: Int
+  notes: EventCreatenotesInput
   act: ActCreateOneWithoutEventInput
   user: UserCreateOneInput!
 }
@@ -532,14 +532,18 @@ input EventCreateManyWithoutActInput {
   connect: [EventWhereUniqueInput!]
 }
 
+input EventCreatenotesInput {
+  set: [String!]
+}
+
 input EventCreateWithoutActInput {
   status: EventStatus!
   title: String!
   start: DateTime!
   end: DateTime!
   allDay: Boolean!
-  notes: String
   draw: Int
+  notes: EventCreatenotesInput
   user: UserCreateOneInput!
 }
 
@@ -565,8 +569,6 @@ enum EventOrderByInput {
   end_DESC
   allDay_ASC
   allDay_DESC
-  notes_ASC
-  notes_DESC
   draw_ASC
   draw_DESC
   createdAt_ASC
@@ -582,7 +584,7 @@ type EventPreviousValues {
   start: DateTime!
   end: DateTime!
   allDay: Boolean!
-  notes: String
+  notes: [String!]!
   draw: Int
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -735,46 +737,6 @@ input EventScalarWhereInput {
 
   """All values that are not equal to given value."""
   allDay_not: Boolean
-  notes: String
-
-  """All values that are not equal to given value."""
-  notes_not: String
-
-  """All values that are contained in given list."""
-  notes_in: [String!]
-
-  """All values that are not contained in given list."""
-  notes_not_in: [String!]
-
-  """All values less than the given value."""
-  notes_lt: String
-
-  """All values less than or equal the given value."""
-  notes_lte: String
-
-  """All values greater than the given value."""
-  notes_gt: String
-
-  """All values greater than or equal the given value."""
-  notes_gte: String
-
-  """All values containing the given string."""
-  notes_contains: String
-
-  """All values not containing the given string."""
-  notes_not_contains: String
-
-  """All values starting with the given string."""
-  notes_starts_with: String
-
-  """All values not starting with the given string."""
-  notes_not_starts_with: String
-
-  """All values ending with the given string."""
-  notes_ends_with: String
-
-  """All values not ending with the given string."""
-  notes_not_ends_with: String
   draw: Int
 
   """All values that are not equal to given value."""
@@ -894,8 +856,8 @@ input EventUpdateInput {
   start: DateTime
   end: DateTime
   allDay: Boolean
-  notes: String
   draw: Int
+  notes: EventUpdatenotesInput
   act: ActUpdateOneWithoutEventInput
   user: UserUpdateOneRequiredInput
 }
@@ -906,8 +868,8 @@ input EventUpdateManyDataInput {
   start: DateTime
   end: DateTime
   allDay: Boolean
-  notes: String
   draw: Int
+  notes: EventUpdatenotesInput
 }
 
 input EventUpdateManyMutationInput {
@@ -916,8 +878,8 @@ input EventUpdateManyMutationInput {
   start: DateTime
   end: DateTime
   allDay: Boolean
-  notes: String
   draw: Int
+  notes: EventUpdatenotesInput
 }
 
 input EventUpdateManyWithoutActInput {
@@ -937,14 +899,18 @@ input EventUpdateManyWithWhereNestedInput {
   data: EventUpdateManyDataInput!
 }
 
+input EventUpdatenotesInput {
+  set: [String!]
+}
+
 input EventUpdateWithoutActDataInput {
   status: EventStatus
   title: String
   start: DateTime
   end: DateTime
   allDay: Boolean
-  notes: String
   draw: Int
+  notes: EventUpdatenotesInput
   user: UserUpdateOneRequiredInput
 }
 
@@ -1106,46 +1072,6 @@ input EventWhereInput {
 
   """All values that are not equal to given value."""
   allDay_not: Boolean
-  notes: String
-
-  """All values that are not equal to given value."""
-  notes_not: String
-
-  """All values that are contained in given list."""
-  notes_in: [String!]
-
-  """All values that are not contained in given list."""
-  notes_not_in: [String!]
-
-  """All values less than the given value."""
-  notes_lt: String
-
-  """All values less than or equal the given value."""
-  notes_lte: String
-
-  """All values greater than the given value."""
-  notes_gt: String
-
-  """All values greater than or equal the given value."""
-  notes_gte: String
-
-  """All values containing the given string."""
-  notes_contains: String
-
-  """All values not containing the given string."""
-  notes_not_contains: String
-
-  """All values starting with the given string."""
-  notes_starts_with: String
-
-  """All values not starting with the given string."""
-  notes_not_starts_with: String
-
-  """All values ending with the given string."""
-  notes_ends_with: String
-
-  """All values not ending with the given string."""
-  notes_not_ends_with: String
   draw: Int
 
   """All values that are not equal to given value."""

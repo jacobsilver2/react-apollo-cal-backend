@@ -19,9 +19,13 @@ const Mutations = {
           },
         },
         title: args.title,
+        status: args.status,
         start: args.start,
         end: args.end,
-        notes: args.notes,
+        notes: {
+          set: args.notes
+        },
+        allDay: args.allDay,
         act: {
           create: {
             name: args.name,
@@ -45,6 +49,7 @@ const Mutations = {
     if (!ctx.request.userId) {
       throw new Error ("You must be logged in to do that");
     }
+    console.log(args.notes);
     const event = await ctx.db.mutation.createEvent({
       data: {
         // this is how we create a relationship between the item and the user
@@ -54,10 +59,13 @@ const Mutations = {
           },
         },
         title: args.title,
+        status: args.status,
         start: args.start,
         end: args.end,
         allDay: args.allDay,
-        notes: args.notes,
+        notes: {
+          set: args.notes
+        },
         act: {
           connect: {
             id: args.actId,
@@ -125,10 +133,14 @@ const Mutations = {
       },
       data: {
         title: updates.title,
+        status: updates.status,
         start: updates.start,
         end: updates.end,
         allDay: updates.allDay,
-        notes: updates.notes,
+        notes: {
+          set: updates.notes
+        },
+        draw: updates.draw,
         act: {
           update: {
             name: updates.name,

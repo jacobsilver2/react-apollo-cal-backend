@@ -30,7 +30,7 @@ type Event {
   start: DateTime!
   end: DateTime!
   allDay: Boolean!
-  notes: String
+  notes: [String!]
   draw: Int
   act: Act
   createdAt: DateTime!
