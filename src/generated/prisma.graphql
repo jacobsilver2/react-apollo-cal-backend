@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/jacob-silver-22a2f3/booking-cal/dev
-# timestamp: Thu Jan 17 2019 08:40:58 GMT-0500 (Eastern Standard Time)
+# timestamp: Wed Jan 23 2019 11:08:50 GMT-0500 (Eastern Standard Time)
 
 type Act implements Node {
   id: ID!
@@ -9,7 +9,7 @@ type Act implements Node {
   largeImage: String
   event(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Event!]
   email: String!
-  notes: String
+  notes: [String!]!
   user: User!
 }
 
@@ -29,9 +29,13 @@ input ActCreateInput {
   image: String
   largeImage: String
   email: String!
-  notes: String
+  notes: ActCreatenotesInput
   event: EventCreateManyWithoutActInput
   user: UserCreateOneInput!
+}
+
+input ActCreatenotesInput {
+  set: [String!]
 }
 
 input ActCreateOneWithoutEventInput {
@@ -45,7 +49,7 @@ input ActCreateWithoutEventInput {
   image: String
   largeImage: String
   email: String!
-  notes: String
+  notes: ActCreatenotesInput
   user: UserCreateOneInput!
 }
 
@@ -71,8 +75,6 @@ enum ActOrderByInput {
   largeImage_DESC
   email_ASC
   email_DESC
-  notes_ASC
-  notes_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -86,7 +88,7 @@ type ActPreviousValues {
   image: String
   largeImage: String
   email: String!
-  notes: String
+  notes: [String!]!
 }
 
 type ActSubscriptionPayload {
@@ -134,7 +136,7 @@ input ActUpdateInput {
   image: String
   largeImage: String
   email: String
-  notes: String
+  notes: ActUpdatenotesInput
   event: EventUpdateManyWithoutActInput
   user: UserUpdateOneRequiredInput
 }
@@ -145,7 +147,11 @@ input ActUpdateManyMutationInput {
   image: String
   largeImage: String
   email: String
-  notes: String
+  notes: ActUpdatenotesInput
+}
+
+input ActUpdatenotesInput {
+  set: [String!]
 }
 
 input ActUpdateOneWithoutEventInput {
@@ -163,7 +169,7 @@ input ActUpdateWithoutEventDataInput {
   image: String
   largeImage: String
   email: String
-  notes: String
+  notes: ActUpdatenotesInput
   user: UserUpdateOneRequiredInput
 }
 
@@ -421,46 +427,6 @@ input ActWhereInput {
 
   """All values not ending with the given string."""
   email_not_ends_with: String
-  notes: String
-
-  """All values that are not equal to given value."""
-  notes_not: String
-
-  """All values that are contained in given list."""
-  notes_in: [String!]
-
-  """All values that are not contained in given list."""
-  notes_not_in: [String!]
-
-  """All values less than the given value."""
-  notes_lt: String
-
-  """All values less than or equal the given value."""
-  notes_lte: String
-
-  """All values greater than the given value."""
-  notes_gt: String
-
-  """All values greater than or equal the given value."""
-  notes_gte: String
-
-  """All values containing the given string."""
-  notes_contains: String
-
-  """All values not containing the given string."""
-  notes_not_contains: String
-
-  """All values starting with the given string."""
-  notes_starts_with: String
-
-  """All values not starting with the given string."""
-  notes_not_starts_with: String
-
-  """All values ending with the given string."""
-  notes_ends_with: String
-
-  """All values not ending with the given string."""
-  notes_not_ends_with: String
   event_every: EventWhereInput
   event_some: EventWhereInput
   event_none: EventWhereInput

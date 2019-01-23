@@ -46,6 +46,6 @@ type Act {
   largeImage: String
   event: [Event]
   email: String!
-  notes: String
+  notes: [String!]
   user: User!
 }

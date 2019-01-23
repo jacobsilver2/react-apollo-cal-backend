@@ -7,7 +7,7 @@ type SuccessMessage {
 type Mutation {
   createEventWithNewAct(title: String, status: EventStatus!, notes: [String!], start: DateTime, end: DateTime, allDay: Boolean, name: String, description: String, email: String, image: String, largeImage: String, actId: String): Event!
   createEventWithExistingAct(title: String, status: EventStatus!, end: DateTime, allDay: Boolean, notes: [String!], start: DateTime, actId: String): Event!
-  updateEvent(id: ID!, title: String, status: EventStatus, notes: [String], draw: Int, start: DateTime, end: DateTime, allDay: Boolean, name: String, description: String, email: String, image: String, largeImage: String, newActId: String, actId: String): Event!
+  updateEvent(id: ID!, title: String, status: EventStatus, notes: [String!], draw: Int, start: DateTime, end: DateTime, allDay: Boolean, name: String, description: String, email: String, image: String, largeImage: String, newActId: String, actId: String): Event!
   # below - probably not needed
   updateEventWithExistingAct(id: ID!, notes: String, date: DateTime, newActId: String, oldActId: String): Event!
   deleteEvent(id: ID!): Event
@@ -17,8 +17,8 @@ type Mutation {
   requestReset(email: String!): SuccessMessage
   resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
   updatePermissions(permissions: [Permission], userId: ID!): User
-  createAct(name: String, description: String, image: String, email: String, largeImage: String, notes: String): Act!
-  updateAct(id: ID!, name: String, email: String, description: String, notes: String, image: String, largeImage: String): Act!
+  createAct(name: String, description: String, image: String, email: String, largeImage: String, notes: [String!]): Act!
+  updateAct(id: ID!, name: String, email: String, description: String, notes: [String!], image: String, largeImage: String): Act!
 }
 
 type Query {

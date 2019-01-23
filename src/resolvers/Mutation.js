@@ -167,7 +167,14 @@ const Mutations = {
             id: ctx.request.userId
           }
         },
-        ...args
+        name: args.name,
+        email: args.email,
+        description: args.description,
+        image: args.image,
+        largeImage: args.largeImage,
+        notes: {
+          set: args.notes
+        },
       }
     }, info);
     return act;
@@ -182,7 +189,16 @@ const Mutations = {
     delete updates.id;
     // run updateAct
     return ctx.db.mutation.updateAct({
-      data: updates,
+      data: {
+        name: args.name,
+        email: args.email,
+        description: args.description,
+        image: args.image,
+        largeImage: args.largeImage,
+        notes: {
+          set: args.notes
+        },
+      },
       where: {
         id: args.id
       }
