@@ -220,6 +220,25 @@ const Mutations = {
     // 3. Delete the item
     return ctx.db.mutation.deleteEvent({ where }, info)
   },
+
+  async moveEvent(parent, args, ctx, info) {
+    const updates = { ...args }
+    delete updates.id;
+    const where = { id: args.id};
+    const event = await ctx.db.query.event({ where }, `{ id user { id }}`);
+    const ownsEvent = event.user.id === ctx.request.userId;
+    const hasPermissions = ctx.request.user.permissions.some(permission => ['ADMIN', 'EVENTUPDATE'].includes(permission));
+    if (!ownsEvent && !hasPermissions) {
+      throw new Error ("You don't have permission to do that.")
+    }
+
+    return ctx.db.mutation.updateEvent({
+      where: {
+        id: args.id
+      },
+      data: updates,
+    })    
+  },
   
   async signup(parent, args, ctx, info) {
     args.email = args.email.toLowerCase();
