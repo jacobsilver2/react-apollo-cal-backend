@@ -4,6 +4,7 @@ const { randomBytes } = require('crypto');
 const { promisify } = require('util');
 const { transport, makeANiceEmail } = require('../mail');
 const { hasPermission } = require('../utils');
+const { format } = require('date-fns');
 const Mutations = {
 
   async createEventWithNewAct(parent, args, ctx, info) {
@@ -228,6 +229,11 @@ const Mutations = {
     const event = await ctx.db.query.event({ where }, `{ id user { id }}`);
     const ownsEvent = event.user.id === ctx.request.userId;
     const hasPermissions = ctx.request.user.permissions.some(permission => ['ADMIN', 'EVENTUPDATE'].includes(permission));
+    const dateString = format(updates.start, "YYYY-MM-DD");
+    if (updates.start) {
+      updates.title = dateString;
+    }
+
     if (!ownsEvent && !hasPermissions) {
       throw new Error ("You don't have permission to do that.")
     }
