@@ -30,6 +30,7 @@ type Query {
   users: [User]!
   acts(where: ActWhereInput, orderBy: ActOrderByInput, skip: Int, first: Int): [Act]!
   act(where: ActWhereUniqueInput!): Act
+  actsConnection(where: ActWhereInput): ActConnection!
 }
 
 type User {
