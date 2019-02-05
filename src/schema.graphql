@@ -20,6 +20,7 @@ type Mutation {
   updatePermissions(permissions: [Permission], userId: ID!): User
   createAct(name: String, description: String, image: String, email: String, largeImage: String, notes: [String!]): Act!
   updateAct(id: ID!, name: String, email: String, description: String, notes: [String!], image: String, largeImage: String): Act!
+  createEmail(from: String!, to: String!, subject: String!, message: String!): SuccessMessage
 }
 
 type Query {

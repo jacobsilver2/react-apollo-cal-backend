@@ -326,6 +326,23 @@ const Mutations = {
     // return the message
     return { message: "Thanks"};
   },
+
+  async createEmail (parent, args, ctx, info ) {
+    const user = await ctx.db.query.user({ where: {email: args.from }})
+    if (!user) {
+      throw new Error(`No user found for email ${args.from}`);
+    }
+    console.log(args)
+    const mailRes = await transport.sendMail({
+      from: args.from,
+      to: args.to,
+      subject: args.subject,
+      html: makeANiceEmail(args.message)
+    })
+    return { message: "Message Sent."}
+  },
+
+
   async resetPassword(parent, args, ctx, info){
     // 1. Check if the passwords match
     if (args.password !== args.confirmPassword) {
