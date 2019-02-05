@@ -7,6 +7,12 @@ enum Permission {
   PERMISSIONUPDATE
 }
 
+enum EventStatus {
+  CONFIRMED
+  HELD
+  CANCELLED
+}
+
 type User {
   id: ID! @unique
   name: String!
@@ -19,11 +25,14 @@ type User {
 
 type Event {
   id: ID! @unique
+  status: EventStatus!
   title: String!
-  description: String
-  image: String
-  largeImage: String
-  date: DateTime!
+  start: DateTime!
+  end: DateTime!
+  allDay: Boolean!
+  notes: [String!]
+  draw: Int
+  act: Act
   createdAt: DateTime!
   updatedAt: DateTime!
   user: User!
@@ -37,6 +46,6 @@ type Act {
   largeImage: String
   event: [Event]
   email: String!
-  notes: String
+  notes: [String!]
   user: User!
 }

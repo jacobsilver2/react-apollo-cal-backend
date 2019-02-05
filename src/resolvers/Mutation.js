@@ -4,25 +4,155 @@ const { randomBytes } = require('crypto');
 const { promisify } = require('util');
 const { transport, makeANiceEmail } = require('../mail');
 const { hasPermission } = require('../utils');
+const { format } = require('date-fns');
 const Mutations = {
 
-  async createEvent(parent, args, ctx, info) {
+  async createEventWithNewAct(parent, args, ctx, info) {
     if (!ctx.request.userId) {
       throw new Error ("You must be logged in to do that");
     }
-
     const event = await ctx.db.mutation.createEvent({
       data: {
         // this is how we create a relationship between the item and the user
         user: {
           connect: {
             id: ctx.request.userId
-          }
+          },
         },
-        ...args
+        title: args.title,
+        status: args.status,
+        start: args.start,
+        end: args.end,
+        notes: {
+          set: args.notes
+        },
+        allDay: args.allDay,
+        act: {
+          create: {
+            name: args.name,
+            email: args.email,
+            description: args.description,
+            image: args.image,
+            largeImage: args.largeImage,
+            user: {
+              connect: {
+                id: ctx.request.userId
+              },
+            },
+          },
+        },
       }
     }, info);
     return event;
+  },
+
+  async createEventWithExistingAct(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error ("You must be logged in to do that");
+    }
+    console.log(args.notes);
+    const event = await ctx.db.mutation.createEvent({
+      data: {
+        // this is how we create a relationship between the item and the user
+        user: {
+          connect: {
+            id: ctx.request.userId
+          },
+        },
+        title: args.title,
+        status: args.status,
+        start: args.start,
+        end: args.end,
+        allDay: args.allDay,
+        notes: {
+          set: args.notes
+        },
+        act: {
+          connect: {
+            id: args.actId,
+          },
+        },
+      }
+    }, info);
+    return event;
+  },
+
+  //! probably not needed
+  updateEventWithExistingAct(parent, args, ctx, info) {
+    const updates = { ...args }
+    delete updates.id;
+    return ctx.db.mutation.updateEvent({
+      data: {
+        where: {
+          id: args.id
+        },
+        start: updates.start,
+        notes: updates.notes,
+        act: {
+          disconnect: [
+            {id: updates.oldActId},
+          ],
+          connect: [
+            {id: updates.newActId},
+          ],
+        },
+      },
+    })
+  },
+
+  updateEvent(parent, args, ctx, info) {
+    // take a copy of the updates
+    const updates = { ...args };
+    // remove the id from the updates
+    delete updates.id;
+    //run the update method
+
+    //! apparently a new feature will be released soon with a 'set' function to replace a nested node.
+    //! i will wait until that feature is implemented to fix this bug.
+
+    if (updates.newActId) {
+      return ctx.db.mutation.updateEvent({
+        where: {
+          id: args.id
+        },
+        data: {
+          act: {
+            disconnect: [
+              {id: updates.actId},
+            ],
+            connect: [
+              {id: updates.newActId}
+            ],
+          }
+        }
+      }, info)
+    }
+
+    return ctx.db.mutation.updateEvent({
+      where: {
+        id: args.id
+      },
+      data: {
+        title: updates.title,
+        status: updates.status,
+        start: updates.start,
+        end: updates.end,
+        allDay: updates.allDay,
+        notes: {
+          set: updates.notes
+        },
+        draw: updates.draw,
+        act: {
+          update: {
+            name: updates.name,
+            email: updates.email,
+            description: updates.description,
+            image: updates.image,
+            largeImage: updates.largeImage,
+          }
+        },
+      },
+    }, info)
   },
 
   async createAct(parent, args, ctx, info) {
@@ -38,20 +168,38 @@ const Mutations = {
             id: ctx.request.userId
           }
         },
-        ...args
+        name: args.name,
+        email: args.email,
+        description: args.description,
+        image: args.image,
+        largeImage: args.largeImage,
+        notes: {
+          set: args.notes
+        },
       }
     }, info);
     return act;
   },
 
-  updateEvent(parent, args, ctx, info) {
+
+
+  updateAct(parent, args, ctx, info){
     // take a copy of the updates
     const updates = { ...args };
-    // remove the id from the updates
+    // remove the ID from the update
     delete updates.id;
-    //run the update method
-    return ctx.db.mutation.updateEvent({
-      data: updates,
+    // run updateAct
+    return ctx.db.mutation.updateAct({
+      data: {
+        name: args.name,
+        email: args.email,
+        description: args.description,
+        image: args.image,
+        largeImage: args.largeImage,
+        notes: {
+          set: args.notes
+        },
+      },
       where: {
         id: args.id
       }
@@ -60,9 +208,9 @@ const Mutations = {
 
   async deleteEvent(parent, args, ctx, info) {
     const where = { id: args.id };
-    // 1. Find the item
-    const event = await ctx.db.query.event({ where }, `{ id title user { id }}`);
-    // 2. Check if they own that item, or have permissions
+    // 1. Find the event
+    const event = await ctx.db.query.event({ where }, `{ id user { id }}`);
+    // 2. Check if they own that event, or have permissions
     const ownsEvent = event.user.id === ctx.request.userId;
     const hasPermissions = ctx.request.user.permissions.some(permission => 
       ['ADMIN', 'EVENTDELETE'].includes(permission) 
@@ -72,6 +220,30 @@ const Mutations = {
     }
     // 3. Delete the item
     return ctx.db.mutation.deleteEvent({ where }, info)
+  },
+
+  async moveEvent(parent, args, ctx, info) {
+    const updates = { ...args }
+    delete updates.id;
+    const where = { id: args.id};
+    const event = await ctx.db.query.event({ where }, `{ id user { id }}`);
+    const ownsEvent = event.user.id === ctx.request.userId;
+    const hasPermissions = ctx.request.user.permissions.some(permission => ['ADMIN', 'EVENTUPDATE'].includes(permission));
+    const dateString = format(updates.start, "YYYY-MM-DD");
+    if (updates.start) {
+      updates.title = dateString;
+    }
+
+    if (!ownsEvent && !hasPermissions) {
+      throw new Error ("You don't have permission to do that.")
+    }
+
+    return ctx.db.mutation.updateEvent({
+      where: {
+        id: args.id
+      },
+      data: updates,
+    })    
   },
   
   async signup(parent, args, ctx, info) {
@@ -154,6 +326,23 @@ const Mutations = {
     // return the message
     return { message: "Thanks"};
   },
+
+  async createEmail (parent, args, ctx, info ) {
+    const user = await ctx.db.query.user({ where: {email: args.from }})
+    if (!user) {
+      throw new Error(`No user found for email ${args.from}`);
+    }
+    console.log(args)
+    const mailRes = await transport.sendMail({
+      from: args.from,
+      to: args.to,
+      subject: args.subject,
+      html: makeANiceEmail(args.message)
+    })
+    return { message: "Message Sent."}
+  },
+
+
   async resetPassword(parent, args, ctx, info){
     // 1. Check if the passwords match
     if (args.password !== args.confirmPassword) {
