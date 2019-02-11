@@ -5,6 +5,7 @@ const { promisify } = require('util');
 const { transport, makeANiceEmail } = require('../mail');
 const { hasPermission } = require('../utils');
 const { format } = require('date-fns');
+const schedule = require('node-schedule');
 const Mutations = {
 
   async createEventWithNewAct(parent, args, ctx, info) {
@@ -332,13 +333,19 @@ const Mutations = {
     if (!user) {
       throw new Error(`No user found for email ${args.from}`);
     }
-    console.log(args)
-    const mailRes = await transport.sendMail({
-      from: args.from,
-      to: args.to,
-      subject: args.subject,
-      html: makeANiceEmail(args.message)
-    })
+
+    async function sendMail(){
+      const mailRes = await transport.sendMail({
+        from: args.from,
+        to: args.to,
+        subject: args.subject,
+        html: makeANiceEmail(args.message)
+      })
+
+    }
+
+    let job = schedule.scheduleJob('*/10 * * * * *', sendMail);
+
     return { message: "Message Sent."}
   },
 
