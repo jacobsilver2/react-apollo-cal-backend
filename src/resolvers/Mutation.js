@@ -343,8 +343,7 @@ const Mutations = {
       })
 
     }
-
-    let job = schedule.scheduleJob('*/10 * * * * *', sendMail);
+    let job = schedule.scheduleJob(args.sendDate, sendMail);
 
     return { message: "Message Sent."}
   },
