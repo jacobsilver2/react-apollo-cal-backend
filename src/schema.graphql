@@ -34,6 +34,10 @@ type Query {
   actsConnection(where: ActWhereInput): ActConnection!
 }
 
+type Subscription {
+  events: [Event]
+}
+
 type User {
   id: ID!
   name: String!
