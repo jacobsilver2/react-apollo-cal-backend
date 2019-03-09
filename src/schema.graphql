@@ -12,6 +12,7 @@ type Mutation {
   # below - probably not needed
   updateEventWithExistingAct(id: ID!, notes: String, date: DateTime, newActId: String, oldActId: String): Event!
   deleteEvent(id: ID!): Event
+  deleteAct(id: ID!): Act
   signup(email: String!, password: String!, name: String!): User
   signin(email: String!, password: String!): User!
   signout: SuccessMessage

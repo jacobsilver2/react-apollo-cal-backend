@@ -223,6 +223,19 @@ const Mutations = {
     return ctx.db.mutation.deleteEvent({ where }, info)
   },
 
+  async deleteAct(parent, args, ctx, info) {
+    const where = { id: args.id }
+    const act = await ctx.db.query.act({ where }, `{ id user { id }}`);
+    const ownsAct = act.user.id === ctx.request.userId;
+    const hasPermissions = ctx.request.user.permissions.some(permission => 
+      ['ADMIN', 'EVENTDELETE'].includes(permission)
+      )
+      if (!ownsAct && !hasPermissions) {
+        throw new Error ("You don't have permission to do that.")
+      }
+    return ctx.db.mutation.deleteAct({ where }, info)
+  },
+
   async moveEvent(parent, args, ctx, info) {
     const updates = { ...args }
     delete updates.id;
